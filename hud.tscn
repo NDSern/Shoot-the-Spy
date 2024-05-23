@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://b66yjpgrtyqjs"]
+
+[ext_resource type="Script" path="res://hud.gd" id="1_oug70"]
+[ext_resource type="FontFile" uid="uid://cumrnhcp03rqd" path="res://font/Xolonium-Regular.ttf" id="1_rs5vy"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_oug70")
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -45.0
+offset_right = 577.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_rs5vy")
+theme_override_font_sizes/font_size = 75
+text = "Shoot The Spy"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Button" type="Button" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -94.5
+offset_top = -248.0
+offset_right = 94.5
+offset_bottom = -157.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = ExtResource("1_rs5vy")
+theme_override_font_sizes/font_size = 68
+text = "Start"
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[node name="InGameHUD" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="TargetLabel" type="Label" parent="InGameHUD"]
+offset_right = 104.0
+offset_bottom = 72.0
+theme_override_fonts/font = ExtResource("1_rs5vy")
+theme_override_font_sizes/font_size = 50
+text = "Kill"
+horizontal_alignment = 2
+
+[node name="ScoreLabel" type="Label" parent="InGameHUD"]
+offset_left = 656.0
+offset_right = 1152.0
+offset_bottom = 64.0
+theme_override_fonts/font = ExtResource("1_rs5vy")
+theme_override_font_sizes/font_size = 50
+text = "Score: 0"
+horizontal_alignment = 2
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

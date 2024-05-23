@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://8nnvjyih7jdv"]
+
+[ext_resource type="Script" path="res://Main.gd" id="1_id8gf"]
+[ext_resource type="PackedScene" uid="uid://b8yyykppsev6i" path="res://better_mob.tscn" id="2_yxv2g"]
+[ext_resource type="PackedScene" uid="uid://b66yjpgrtyqjs" path="res://hud.tscn" id="3_e7cwh"]
+
+[sub_resource type="Curve2D" id="Curve2D_rfgw7"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 96, 96, 0, 0, 0, 0, 1056, 96, 0, 0, 0, 0, 1056, 560, 0, 0, 0, 0, 96, 568, 0, 0, 0, 0, 96, 96)
+}
+point_count = 5
+
+[node name="Main" type="Node"]
+script = ExtResource("1_id8gf")
+mob_scene = ExtResource("2_yxv2g")
+
+[node name="Spawn" type="Path2D" parent="."]
+curve = SubResource("Curve2D_rfgw7")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Spawn"]
+position = Vector2(96, 96)
+
+[node name="HUD" parent="." instance=ExtResource("3_e7cwh")]
+
+[node name="TargetHUDPosition" type="Marker2D" parent="."]
+position = Vector2(64, 128)
+
+[node name="TargetPicture" parent="." instance=ExtResource("2_yxv2g")]
+position = Vector2(0, 0)
+
+[connection signal="start_game" from="HUD" to="." method="_on_canvas_layer_start_game"]
