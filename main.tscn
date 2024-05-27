@@ -1,8 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://8nnvjyih7jdv"]
+[gd_scene load_steps=8 format=3 uid="uid://8nnvjyih7jdv"]
 
 [ext_resource type="Script" path="res://Main.gd" id="1_id8gf"]
 [ext_resource type="PackedScene" uid="uid://b8yyykppsev6i" path="res://better_mob.tscn" id="2_yxv2g"]
 [ext_resource type="PackedScene" uid="uid://b66yjpgrtyqjs" path="res://hud.tscn" id="3_e7cwh"]
+[ext_resource type="Texture2D" uid="uid://d22fw3drfkk4j" path="res://sprites/bg.png" id="4_3v0qp"]
+[ext_resource type="AudioStream" uid="uid://deuroiixjfjf6" path="res://sprites/ding-101377.mp3" id="5_iiiee"]
+[ext_resource type="AudioStream" uid="uid://cji6bgtvlveb2" path="res://sprites/error-sound-39539.mp3" id="6_qh7um"]
 
 [sub_resource type="Curve2D" id="Curve2D_rfgw7"]
 _data = {
@@ -23,9 +26,21 @@ position = Vector2(96, 96)
 [node name="HUD" parent="." instance=ExtResource("3_e7cwh")]
 
 [node name="TargetHUDPosition" type="Marker2D" parent="."]
-position = Vector2(64, 128)
+position = Vector2(80, 128)
 
 [node name="TargetPicture" parent="." instance=ExtResource("2_yxv2g")]
 position = Vector2(0, 0)
+
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 1160.0
+offset_bottom = 740.0
+texture = ExtResource("4_3v0qp")
+
+[node name="CorrectSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_iiiee")
+
+[node name="FailedSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_qh7um")
+volume_db = 20.0
 
 [connection signal="start_game" from="HUD" to="." method="_on_canvas_layer_start_game"]

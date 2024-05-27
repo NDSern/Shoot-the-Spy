@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://b66yjpgrtyqjs"]
+[gd_scene load_steps=5 format=3 uid="uid://b66yjpgrtyqjs"]
 
 [ext_resource type="Script" path="res://hud.gd" id="1_oug70"]
 [ext_resource type="FontFile" uid="uid://cumrnhcp03rqd" path="res://font/Xolonium-Regular.ttf" id="1_rs5vy"]
+
+[sub_resource type="InputEventAction" id="InputEventAction_n734x"]
+action = &"Start"
+
+[sub_resource type="Shortcut" id="Shortcut_bs6t0"]
+events = [SubResource("InputEventAction_n734x")]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_oug70")
@@ -18,6 +24,7 @@ offset_right = 577.0
 offset_bottom = 46.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0.482353, 1, 1)
 theme_override_fonts/font = ExtResource("1_rs5vy")
 theme_override_font_sizes/font_size = 75
 text = "Shoot The Spy"
@@ -39,6 +46,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_fonts/font = ExtResource("1_rs5vy")
 theme_override_font_sizes/font_size = 68
+shortcut = SubResource("Shortcut_bs6t0")
 text = "Start"
 
 [node name="Timer" type="Timer" parent="."]
@@ -50,19 +58,43 @@ layer = 2
 [node name="TargetLabel" type="Label" parent="InGameHUD"]
 offset_right = 104.0
 offset_bottom = 72.0
+theme_override_colors/font_color = Color(0, 0.482353, 1, 1)
 theme_override_fonts/font = ExtResource("1_rs5vy")
 theme_override_font_sizes/font_size = 50
-text = "Kill"
+text = "Target"
 horizontal_alignment = 2
 
 [node name="ScoreLabel" type="Label" parent="InGameHUD"]
 offset_left = 656.0
 offset_right = 1152.0
 offset_bottom = 64.0
+theme_override_colors/font_color = Color(0, 0.482353, 1, 1)
 theme_override_fonts/font = ExtResource("1_rs5vy")
 theme_override_font_sizes/font_size = 50
 text = "Score: 0"
 horizontal_alignment = 2
+
+[node name="GameOverHUD" type="CanvasLayer" parent="."]
+
+[node name="GameOverLabel" type="Label" parent="GameOverHUD"]
+offset_right = 1152.0
+offset_bottom = 376.0
+theme_override_colors/font_color = Color(0.8, 0.2, 0.2, 1)
+theme_override_fonts/font = ExtResource("1_rs5vy")
+theme_override_font_sizes/font_size = 68
+text = "GAME OVER!"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="GameOverScoreLabel" type="Label" parent="GameOverHUD"]
+offset_right = 1153.0
+offset_bottom = 560.0
+theme_override_colors/font_color = Color(0, 0.482353, 1, 1)
+theme_override_fonts/font = ExtResource("1_rs5vy")
+theme_override_font_sizes/font_size = 30
+text = "Your score:"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

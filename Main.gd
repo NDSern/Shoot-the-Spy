@@ -2,37 +2,48 @@ extends Node
 
 @export var mob_scene: PackedScene
 var score
+var level
+var newLevel
 var target
+var timeToShoot := 0.0
+var cursor = load("res://sprites/vien den.png")
+
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	Input.set_custom_mouse_cursor(cursor)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	pass
+	# Stopwatch using delta
+	# The faster the target is picked, the higher the score
+	if newLevel: 
+		var thisRoundScore = 1/timeToShoot * 100
+		score += int(thisRoundScore)
+		timeToShoot = 0
+		newLevel = false
+		$HUD.update_score(score)
+		new_round()
+	timeToShoot += delta
 
 # Signals from packed scene
 func _on_correct_target():
-	score += 1
-	$HUD.update_score(score)
-	new_round()
+	level += 1
+	$CorrectSound.play()
+	newLevel = true
 
 func _on_target_escaped():
-	score = -1
-	$HUD.update_score(score)
+	print("Target escaped")	
 	game_over()
 
 func _on_wrong_target():
-	score = -2
-	$HUD.update_score(score)
+	print("Shoot the wrong target")	
 	game_over()
 
-
-func spawn_target(chosen_target):
+func spawn_mob(avoid_target, killable):
 	var mob = mob_scene.instantiate()
-	
+		
 	var mob_spawn_location = $Spawn/PathFollow2D
 	mob_spawn_location.progress_ratio = randf()
 	
@@ -41,36 +52,21 @@ func spawn_target(chosen_target):
 	mob.position = mob_spawn_location.position
 	
 	direction += randf_range(-PI / 4, PI / 4)
-	#mob.rotation = direction
 	
-	var velocity = Vector2(randf_range(50.0, 100.0), 0.0)
+	var min_speed = 100 + level * 10
+	var max_speed = 200 + level * 10
+	var velocity = Vector2(randf_range(min_speed, max_speed), 0.0)
 	mob.linear_velocity = velocity.rotated(direction)
 	
 	add_child(mob)
-	mob.run_target(chosen_target)
-	mob.connect("correct_target", _on_correct_target)
-	mob.connect("escaped", _on_target_escaped)
 
-
-func spawn_mob(avoid_target):
-	var mob = mob_scene.instantiate()
-	
-	var mob_spawn_location = $Spawn/PathFollow2D
-	mob_spawn_location.progress_ratio = randf()
-	
-	var direction = mob_spawn_location.rotation + PI / 2
-	
-	mob.position = mob_spawn_location.position
-	
-	direction += randf_range(-PI / 4, PI / 4)
-	#mob.rotation = direction
-	
-	var velocity = Vector2(randf_range(100.0, 200.0), 0.0)
-	mob.linear_velocity = velocity.rotated(direction)
-	
-	add_child(mob)
-	mob.run_civ(avoid_target)
-	mob.connect("wrong_target", _on_wrong_target)
+	if killable:
+		mob.run_target(avoid_target)
+		mob.connect("correct_target", _on_correct_target)
+		mob.connect("escaped", _on_target_escaped)
+	else:
+		mob.run_civ(avoid_target)
+		mob.connect("wrong_target", _on_wrong_target)
 
 
 func spawn_dummy(target):
@@ -82,11 +78,16 @@ func spawn_dummy(target):
 
 # GAME START
 func _on_canvas_layer_start_game():
+	$HUD/GameOverHUD.hide()
+	level = 0
 	score = 0
 	$HUD.show_message("Get Ready!")
+	await $HUD/Timer.timeout
+	$HUD.update_score(score)
+	$HUD/InGameHUD.show()
 	new_round()
 
-
+# Game logic
 func new_round():
 	# Despawn everything, fresh start
 	get_tree().call_group("mobs", "queue_free")
@@ -96,13 +97,15 @@ func new_round():
 	# Spawn the target picture
 	spawn_dummy(target)
 	# Spawn target
-	spawn_target(target)
+	spawn_mob(target, true)
 	# Amounts of civ to spawn
-	var civs = score * 2 + (randi() % 3 + 1)
+	var civs = level * 2 + (randi() % 5 + 1)
 	# Spawn civs here
 	for i in range(civs):
-		spawn_mob(target)
+		spawn_mob(target, false)
 
 
 func game_over():
-	pass
+	get_tree().call_group("mobs", "queue_free")
+	$FailedSound.play()
+	$HUD.show_game_over(score)
