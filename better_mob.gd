@@ -23,9 +23,13 @@ func dummy_start(pos, target):
 
 
 func run_target(animation):
+	# Get the array of names of animations
 	var mob_types = $AnimatedSprite2D.sprite_frames.get_animation_names()
+	# Play the selected animation
 	$AnimatedSprite2D.play(mob_types[animation])
+	# This is the target that need to be shot
 	killable = true
+	# Show the target animation
 	show()
 
 func run_civ(animation):

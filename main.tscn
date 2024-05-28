@@ -28,9 +28,6 @@ position = Vector2(96, 96)
 [node name="TargetHUDPosition" type="Marker2D" parent="."]
 position = Vector2(80, 128)
 
-[node name="TargetPicture" parent="." instance=ExtResource("2_yxv2g")]
-position = Vector2(0, 0)
-
 [node name="Background" type="TextureRect" parent="."]
 offset_right = 1160.0
 offset_bottom = 740.0

@@ -42,24 +42,26 @@ func _on_wrong_target():
 	game_over()
 
 func spawn_mob(avoid_target, killable):
+	# Instantiate the mob
 	var mob = mob_scene.instantiate()
-		
+	# Get the set of locations the mob can spawn on
 	var mob_spawn_location = $Spawn/PathFollow2D
+	# Randomize the location
 	mob_spawn_location.progress_ratio = randf()
-	
+	# Randomize the place the mob will go to
 	var direction = mob_spawn_location.rotation + PI / 2
-	
+	# Place the mob in location
 	mob.position = mob_spawn_location.position
-	
+	# Direct the mob
 	direction += randf_range(-PI / 4, PI / 4)
-	
+	# Randomize the speed of the mob based on difficulty
 	var min_speed = 100 + level * 10
 	var max_speed = 200 + level * 10
 	var velocity = Vector2(randf_range(min_speed, max_speed), 0.0)
 	mob.linear_velocity = velocity.rotated(direction)
-	
+	# Spawn/Render the mob
 	add_child(mob)
-
+	# Handle the kill logic, whether or not the player hit the correct target
 	if killable:
 		mob.run_target(avoid_target)
 		mob.connect("correct_target", _on_correct_target)
