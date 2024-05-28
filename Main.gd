@@ -4,6 +4,7 @@ extends Node
 var score
 var level
 var newLevel
+var innocent = false
 var target
 var timeToShoot := 0.0
 var cursor = load("res://sprites/vien den.png")
@@ -18,13 +19,17 @@ func _ready():
 func _process(delta):
 	# Stopwatch using delta
 	# The faster the target is picked, the higher the score
-	if newLevel: 
+	if newLevel || (newLevel && innocent): 
 		var thisRoundScore = 1/timeToShoot * 100
 		score += int(thisRoundScore)
 		timeToShoot = 0
 		newLevel = false
+		innocent = false
 		$HUD.update_score(score)
 		new_round()
+	if innocent && !newLevel:
+		game_over()
+		innocent = false
 	timeToShoot += delta
 
 # Signals from packed scene
@@ -34,12 +39,12 @@ func _on_correct_target():
 	newLevel = true
 
 func _on_target_escaped():
-	print("Target escaped")	
-	game_over()
+	print("Target escaped")
+	innocent = true
 
 func _on_wrong_target():
 	print("Shoot the wrong target")	
-	game_over()
+	innocent = true
 
 func spawn_mob(avoid_target, killable):
 	# Instantiate the mob
