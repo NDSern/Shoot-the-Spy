@@ -1,6 +1,6 @@
 # Shoot the Spy
 
-<video src="Demo.mkv"/>
+<video src='Demo.mkv' width=180/>
 
 This game was created using Godot 4.2 engine. It is a demonstration of the engine, as well as the author attempt to use it.
 
