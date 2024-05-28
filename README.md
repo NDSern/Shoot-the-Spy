@@ -1,6 +1,7 @@
 # Shoot the Spy
 
 [![Game Demo](https://img.youtube.com/vi/IyJgB0r6KHQ/0.jpg)](https://youtu.be/IyJgB0r6KHQ)
+Click on the Image for a Video Demo
 
 This game was created using Godot 4.2 engine. It is a demonstration of the engine, as well as the author attempt to use it.
 
