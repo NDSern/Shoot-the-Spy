@@ -39,6 +39,8 @@ func run_civ(animation):
 	while target == animation:
 		target = randi() % 7
 	var mob_types = $AnimatedSprite2D.sprite_frames.get_animation_names()
+	var randomAnimationSpeed = randf()
+	$AnimatedSprite2D.speed_scale = randomAnimationSpeed
 	$AnimatedSprite2D.play(mob_types[target])
 	killable = false
 	show()
